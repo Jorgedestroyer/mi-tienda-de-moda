@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SerpentSilence</title>
   <style>
     body {
@@ -47,7 +46,7 @@
 
     .producto img {
       width: 100%;
-      height: 200px;
+      height: 400px;
       object-fit: cover;
       border-radius: 5px;
     }
@@ -59,11 +58,42 @@
       padding: 1rem;
       margin-top: 2rem;
     }
+    #carrito    
+        {   
+  background-color: #ffffff;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);}
+
+#carrito ul {
+  list-style: none;
+  padding: 0;
+}
+
+#carrito li {
+  margin: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+#carrito button {
+  background-color: #c26700;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#carrito button:hover {
+  background-color: #a35400;
+}
   </style>
 </head>
 <body>
   <header>
-    <h1>Tienda de Moda</h1>
+    <h1>SerpentSilence</h1>
     <p>lleva tu estilo a otra dimension</p>
   </header>
 
@@ -94,9 +124,61 @@
       <button>Comprar</button>
     </div>
   </section>
+  <section id="carrito">
+    <h2>Carrito de Compras</h2>
+    <ul id="lista-carrito"></ul>
+    <p id="total">Total: $0</p>
+  </section>
 
-  <footer>
-    <p>© 2025 Tienda de Moda - Todos los derechos reservados</p>
-  </footer>
+  
 </body>
+<fotter>
+    <footer>
+        <p>&copy; 2023 SerpentSilence. Todos los derechos reservados.</p>
+
+        <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        const buttons = document.querySelectorAll(".producto button");
+        const carrito = [];
+        const listaCarrito = document.getElementById("lista-carrito");
+        const totalElement = document.getElementById("total");
+
+        buttons.forEach(button => {
+            button.addEventListener("click", (event) => {
+                const producto = event.target.parentElement;
+                const nombre = producto.querySelector("h3").textContent;
+                const precio = parseFloat(producto.querySelector("p").textContent.replace("$", "").replace(".", ""));
+
+                // Agregar producto al carrito
+                carrito.push({ nombre, precio });
+
+                // Actualizar el carrito en la página
+                actualizarCarrito();
+            });
+        });
+
+        function actualizarCarrito() {
+            // Limpiar la lista del carrito
+            listaCarrito.innerHTML = "";
+
+            // Mostrar los productos en el carrito
+            carrito.forEach((producto, index) => {
+                const li = document.createElement("li");
+                li.textContent = `${producto.nombre} - $${producto.precio.toLocaleString()}`;
+                const botonEliminar = document.createElement("button");
+                botonEliminar.textContent = "Eliminar";
+                botonEliminar.addEventListener("click", () => {
+                    carrito.splice(index, 1);
+                    actualizarCarrito();
+                });
+                li.appendChild(botonEliminar);
+                listaCarrito.appendChild(li);
+            });
+
+            // Calcular el total
+            const total = carrito.reduce((sum, producto) => sum + producto.precio, 0);
+            totalElement.textContent = `Total: $${total.toLocaleString()}`;
+        }
+    });
+</script>
 </html>
